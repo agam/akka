@@ -423,8 +423,8 @@ private final case class SavedIslandData(islandGlobalOffset: Int, lastVisitedOff
     materialize(_runnableGraph, defaultAttributes)
 
   override def materialize[Mat](
-     _runnableGraph:    Graph[ClosedShape, Mat],
-     defaultAttributes: Attributes): Mat =
+    _runnableGraph:    Graph[ClosedShape, Mat],
+    defaultAttributes: Attributes): Mat =
     materialize(
       _runnableGraph,
       defaultAttributes,
@@ -432,10 +432,10 @@ private final case class SavedIslandData(islandGlobalOffset: Int, lastVisitedOff
       PhasedFusingActorMaterializer.DefaultPhases)
 
   override def materialize[Mat](
-       graph:             Graph[ClosedShape, Mat],
-       defaultAttributes: Attributes,
-       defaultPhase:      Phase[Any],
-       phases:            Map[IslandTag, Phase[Any]]): Mat = {
+    graph:             Graph[ClosedShape, Mat],
+    defaultAttributes: Attributes,
+    defaultPhase:      Phase[Any],
+    phases:            Map[IslandTag, Phase[Any]]): Mat = {
     val islandTracking = new IslandTracking(phases, settings, defaultPhase, this, islandNamePrefix = createFlowName() + "-")
 
     var current: Traversal = graph.traversalBuilder.traversal
