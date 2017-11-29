@@ -1,2 +1,3 @@
 # Attributes overhaul
 ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.stream.Graph.async")
+ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.impl.PhasedFusingActorMaterializer.defaultInitialAttributes")
