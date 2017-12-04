@@ -143,6 +143,7 @@ final class Source[+Out, +Mat](
    * of multiple graphs, new attributes on the composite will be less specific than attributes
    * set directly on the individual graphs of the composite.
    */
+  @deprecated("Use addAttributes instead of withAttributes, will be made internal", "2.5.8")
   override def withAttributes(attr: Attributes): Repr[Out] =
     new Source(traversalBuilder.setAttributes(attr), shape)
 
@@ -152,12 +153,14 @@ final class Source[+Out, +Mat](
    * of multiple graphs, the added attributes will be on the composite and therefore less specific than attributes
    * set directly on the individual graphs of the composite.
    */
-  override def addAttributes(attr: Attributes): Repr[Out] = withAttributes(traversalBuilder.attributes and attr)
+  override def addAttributes(attr: Attributes): Repr[Out] =
+    super.addAttributes(attr).asInstanceOf[Repr[Out]]
 
   /**
    * Add a ``name`` attribute to this Source.
    */
-  override def named(name: String): Repr[Out] = addAttributes(Attributes.name(name))
+  override def named(name: String): Repr[Out] =
+    super.named(name).asInstanceOf[Repr[Out]]
 
   /**
    * Put an asynchronous boundary around this `Source`

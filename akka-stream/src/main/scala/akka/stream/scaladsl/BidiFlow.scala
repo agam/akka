@@ -171,13 +171,13 @@ final class BidiFlow[-I1, +O1, -I2, +O2, +Mat](
    * only to the contained processing stages).
    */
   override def addAttributes(attr: Attributes): BidiFlow[I1, O1, I2, O2, Mat] =
-    withAttributes(traversalBuilder.attributes and attr)
+    super.addAttributes(attr).asInstanceOf[BidiFlow[I1, O1, I2, O2, Mat]]
 
   /**
    * Add a ``name`` attribute to this Flow.
    */
   override def named(name: String): BidiFlow[I1, O1, I2, O2, Mat] =
-    addAttributes(Attributes.name(name))
+    super.named(name).asInstanceOf[BidiFlow[I1, O1, I2, O2, Mat]]
 
   /**
    * Put an asynchronous boundary around this `BidiFlow`

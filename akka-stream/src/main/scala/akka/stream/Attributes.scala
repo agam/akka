@@ -251,6 +251,10 @@ final case class Attributes(attributeList: List[Attributes.Attribute] = Nil) {
 object Attributes {
 
   trait Attribute
+
+  /**
+   * @see [[Attributes#name()]]
+   */
   final case class Name(n: String) extends Attribute
   final case class InputBuffer(initial: Int, max: Int) extends Attribute
   final case class LogLevels(onElement: Logging.LogLevel, onFinish: Logging.LogLevel, onFailure: Logging.LogLevel) extends Attribute
@@ -274,6 +278,10 @@ object Attributes {
   /**
    * Specifies the name of the operation.
    * If the name is null or empty the name is ignored, i.e. [[#none]] is returned.
+   *
+   * Prefer using the `Graph.named(name)` as that will ensure there is just one name
+   * per "level" of the graph giving a name-path to each stage ("graph-subgraph-stage") useful for logging etc.
+   * Using this directly will potentially lead to the same level appending multiple names to that path.
    *
    * When using this method the name is encoded with URLEncoder with UTF-8 because
    * the name is sometimes used as part of actor name. If that is not desired

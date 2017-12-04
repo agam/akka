@@ -227,12 +227,14 @@ final class Flow[-In, +Out, +Mat](
    * If this Flow is a composite of multiple graphs, new attributes on the composite will be
    * less specific than attributes set directly on the individual graphs of the composite.
    */
-  override def addAttributes(attr: Attributes): Repr[Out] = withAttributes(traversalBuilder.attributes and attr)
+  override def addAttributes(attr: Attributes): Repr[Out] =
+    super.addAttributes(attr).asInstanceOf[Repr[Out]]
 
   /**
    * Add a ``name`` attribute to this Flow.
    */
-  override def named(name: String): Repr[Out] = addAttributes(Attributes.name(name))
+  override def named(name: String): Repr[Out] =
+    super.named(name).asInstanceOf[Repr[Out]]
 
   /**
    * Put an asynchronous boundary around this `Flow`
@@ -524,13 +526,13 @@ final case class RunnableGraph[+Mat](override val traversalBuilder: TraversalBui
   def run()(implicit materializer: Materializer): Mat = materializer.materialize(this)
 
   override def addAttributes(attr: Attributes): RunnableGraph[Mat] =
-    withAttributes(traversalBuilder.attributes and attr)
+    super.addAttributes(attr).asInstanceOf[RunnableGraph[Mat]]
 
   override def withAttributes(attr: Attributes): RunnableGraph[Mat] =
     new RunnableGraph(traversalBuilder.setAttributes(attr))
 
   override def named(name: String): RunnableGraph[Mat] =
-    addAttributes(Attributes.name(name))
+    super.named(name).asInstanceOf[RunnableGraph[Mat]]
 
   /**
    * Note that an async boundary around a runnable graph does not make sense

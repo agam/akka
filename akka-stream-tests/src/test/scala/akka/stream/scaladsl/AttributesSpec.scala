@@ -179,6 +179,18 @@ class AttributesSpec extends StreamSpec(ConfigFactory.parseString(
       // least specific
       attributes.getFirst[Name] should contain(Name("whole-graph"))
     }
+
+    "not append when setting name" in {
+      val attributes = Source.fromGraph(new AttributesSource(Attributes.name("originalname")))
+        .named("newname1")
+        .named("newname2")
+        .toMat(Sink.head)(Keep.left)
+        .named("surrounding")
+        .run()
+
+      println(attributes)
+      attributes.nameLifted should ===(Some("surrounding-newname2"))
+    }
   }
 
   "attributes on a source" must {

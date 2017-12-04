@@ -441,7 +441,7 @@ private final case class SavedIslandData(islandGlobalOffset: Int, lastVisitedOff
     var current: Traversal = graph.traversalBuilder.traversal
 
     val attributesStack = new java.util.ArrayDeque[Attributes](8)
-    attributesStack.addLast(defaultAttributes and graph.traversalBuilder.attributes)
+    attributesStack.addLast(defaultAttributes)
 
     val traversalStack = new java.util.ArrayDeque[Traversal](16)
     traversalStack.addLast(current)
@@ -449,6 +449,7 @@ private final case class SavedIslandData(islandGlobalOffset: Int, lastVisitedOff
     val matValueStack = new java.util.ArrayDeque[Any](8)
 
     if (Debug) {
+      println(s"--- Initial attribute stack: $attributesStack")
       println(s"--- Materializing layout:")
       TraversalBuilder.printTraversal(current)
       println(s"--- Start materialization")

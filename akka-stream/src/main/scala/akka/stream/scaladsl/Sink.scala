@@ -61,6 +61,7 @@ final class Sink[-In, +Mat](
    * of multiple graphs, new attributes on the composite will be less specific than attributes
    * set directly on the individual graphs of the composite.
    */
+  @deprecated("Use addAttributes instead of withAttributes, will be made internal", "2.5.8")
   override def withAttributes(attr: Attributes): Sink[In, Mat] =
     new Sink(
       traversalBuilder.setAttributes(attr),
@@ -73,12 +74,13 @@ final class Sink[-In, +Mat](
    * less specific than attributes set directly on the individual graphs of the composite.
    */
   override def addAttributes(attr: Attributes): Sink[In, Mat] =
-    withAttributes(traversalBuilder.attributes and attr)
+    super.addAttributes(attr).asInstanceOf[Sink[In, Mat]]
 
   /**
    * Add a ``name`` attribute to this Sink.
    */
-  override def named(name: String): Sink[In, Mat] = addAttributes(Attributes.name(name))
+  override def named(name: String): Sink[In, Mat] =
+    super.named(name).asInstanceOf[Sink[In, Mat]]
 
   /**
    * Put an asynchronous boundary around this `Source`
