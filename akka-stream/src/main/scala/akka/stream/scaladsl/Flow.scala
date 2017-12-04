@@ -846,7 +846,7 @@ trait FlowOps[+Out, +Mat] {
    * '''Cancels when''' downstream cancels
    */
   def filterNot(p: Out ⇒ Boolean): Repr[Out] =
-    via(Flow[Out].filter(!p(_)).withAttributes(DefaultAttributes.filterNot))
+    via(Flow[Out].filter(!p(_)).named("filterNot"))
 
   /**
    * Terminate processing (and cancel the upstream publisher) after predicate
@@ -1207,7 +1207,7 @@ trait FlowOps[+Out, +Mat] {
    * '''Cancels when''' downstream completes
    */
   def groupedWithin(n: Int, d: FiniteDuration): Repr[immutable.Seq[Out]] =
-    via(new GroupedWeightedWithin[Out](n, ConstantFun.oneLong, d).withAttributes(DefaultAttributes.groupedWithin))
+    via(new GroupedWeightedWithin[Out](n, ConstantFun.oneLong, d).named("groupedWithin"))
 
   /**
    * Chunk up this stream into groups of elements received within a time window,
@@ -1355,7 +1355,7 @@ trait FlowOps[+Out, +Mat] {
    * See also [[FlowOps.conflate]], [[FlowOps.limit]], [[FlowOps.limitWeighted]] [[FlowOps.batch]] [[FlowOps.batchWeighted]]
    */
   def conflateWithSeed[S](seed: Out ⇒ S)(aggregate: (S, Out) ⇒ S): Repr[S] =
-    via(Batch(1L, ConstantFun.zeroLong, seed, aggregate).withAttributes(DefaultAttributes.conflate))
+    via(Batch(1L, ConstantFun.zeroLong, seed, aggregate).named("conflate"))
 
   /**
    * Allows a faster upstream to progress independently of a slower subscriber by conflating elements into a summary
@@ -1409,7 +1409,7 @@ trait FlowOps[+Out, +Mat] {
    * @param aggregate Takes the currently batched value and the current pending element to produce a new aggregate
    */
   def batch[S](max: Long, seed: Out ⇒ S)(aggregate: (S, Out) ⇒ S): Repr[S] =
-    via(Batch(max, ConstantFun.oneLong, seed, aggregate).withAttributes(DefaultAttributes.batch))
+    via(Batch(max, ConstantFun.oneLong, seed, aggregate))
 
   /**
    * Allows a faster upstream to progress independently of a slower subscriber by aggregating elements into batches
@@ -1440,7 +1440,7 @@ trait FlowOps[+Out, +Mat] {
    * @param aggregate Takes the currently batched value and the current pending element to produce a new batch
    */
   def batchWeighted[S](max: Long, costFn: Out ⇒ Long, seed: Out ⇒ S)(aggregate: (S, Out) ⇒ S): Repr[S] =
-    via(Batch(max, costFn, seed, aggregate).withAttributes(DefaultAttributes.batchWeighted))
+    via(Batch(max, costFn, seed, aggregate).named("batchWeighted"))
 
   /**
    * Allows a faster downstream to progress independently of a slower publisher by extrapolating elements from an older
@@ -2300,6 +2300,7 @@ trait FlowOps[+Out, +Mat] {
       FlowShape(bcast.in, bcast.out(0))
     }
 
+  @deprecated("Use addAttributes instead of withAttributes, will be made internal", "2.5.8")
   def withAttributes(attr: Attributes): Repr[Out]
 
   def addAttributes(attr: Attributes): Repr[Out]

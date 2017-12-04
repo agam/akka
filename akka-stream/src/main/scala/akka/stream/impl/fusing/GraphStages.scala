@@ -33,6 +33,7 @@ import scala.util.control.NonFatal
   attributes: Attributes,
   stage:      GraphStageWithMaterializedValue[S, M]) extends AtomicModule[S, M] {
 
+  @deprecated("Use addAttributes instead of withAttributes, will be made internal", "2.5.8")
   override def withAttributes(attributes: Attributes): AtomicModule[S, M] =
     if (attributes ne this.attributes) new GraphStageModule(shape, attributes, stage)
     else this

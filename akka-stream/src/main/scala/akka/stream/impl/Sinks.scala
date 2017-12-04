@@ -233,6 +233,8 @@ import akka.util.OptionVal
 
   val in: Inlet[T] = Inlet("headOption.in")
 
+  override protected def initialAttributes: Attributes = DefaultAttributes.inputBufferOne
+
   override val shape: SinkShape[T] = SinkShape.of(in)
 
   override def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
