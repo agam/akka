@@ -49,7 +49,8 @@ trait Graph[+S <: Shape, +M] {
         // to make names form a path through the graph, we need to avoid having multiple names
         // added on the same "level" of the graph
         withAttributes(Attributes(replaceFirstName(traversalBuilder.attributes.attributeList, Nil)))
-      case _ ⇒ addAttributes(Attributes.name(name))
+      case Some(_) ⇒ this // same name added twice
+      case _       ⇒ addAttributes(Attributes.name(name))
     }
   }
 
